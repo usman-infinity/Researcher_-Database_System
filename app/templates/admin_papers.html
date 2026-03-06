@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Panel</title>
+</head>
+<body>
+
+<h2>Research Papers</h2>
+
+<table border="1">
+<tr>
+<th>Title</th>
+<th>Authors</th>
+<th>Year</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+{% for paper in papers %}
+<tr>
+<td>{{ paper.title }}</td>
+<td>{{ paper.authors }}</td>
+<td>{{ paper.year }}</td>
+<td>
+{% if paper.verified %}
+Verified
+{% else %}
+Pending
+{% endif %}
+</td>
+
+<td>
+{% if not paper.verified %}
+<a href="/admin/approve/{{paper.id}}">Approve</a>
+{% endif %}
+</td>
+
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, {{ user.name }}!</h1>
+    <h2>Quick Links:</h2>
+    <ul>
+        <li><a href="{{ url_for('dashboard.dashboard') }}">Dashboard Home</a></li>
+        <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+        {% if user.role == 'faculty' %}
+        <li><a href="{{ url_for('papers.upload_paper') }}">Upload Paper</a></li>
+        {% endif %}
+        <li><a href="{{ url_for('papers.list_papers') }}">Paper List</a></li>
+        <li><a href="{{ url_for('papers.search_papers') }}">Search Papers</a></li>
+    </ul>
+</body>
+</html>

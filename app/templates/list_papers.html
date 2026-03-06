@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Uploaded Papers</title>
+</head>
+<body>
+    <h1>All Uploaded Papers</h1>
+   <table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Authors</th>
+            <th>Year</th>
+            <th>Department</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for paper in papers %}
+        <tr>
+            <td>{{ paper.title }}</td>
+            <td>{{ paper.authors }}</td>
+            <td>{{ paper.year }}</td>
+            <td>{{ paper.department.name if paper.department else '' }}</td>
+            <td>
+                {% if paper.verified %}
+                    Verified
+                {% else %}
+                    Pending
+                {% endif %}
+            </td>
+            <td>
+                {% if not paper.verified and current_user.role == 'admin' %}
+                    <form method="POST" action="{{ url_for('papers.verify_paper', paper_id=paper.id) }}">
+                        <button type="submit">Verify</button>
+                    </form>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<form method="POST" action="/papers/upload" enctype="multipart/form-data">
+    <label>Title:</label><br>
+    <input type="text" name="title" required><br><br>
+
+    <label>Authors:</label><br>
+    <input type="text" name="authors" required><br><br>
+
+    <label>Year:</label><br>
+    <input type="number" name="year" required><br><br>
+
+    <label>Department:</label><br>
+    <input type="text" name="department" required><br><br>
+
+    <label>PDF File:</label><br>
+    <input type="file" name="pdf_file" accept=".pdf"><br><br>
+
+    <button type="submit">Upload Paper</button>
+</form>
