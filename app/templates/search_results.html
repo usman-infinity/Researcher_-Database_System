@@ -1,0 +1,33 @@
+<h2>Search Research Papers</h2>
+
+<form method="POST">
+    <input type="text" name="query" placeholder="Search by title or author" required>
+    <button type="submit">Search</button>
+</form>
+
+<hr>
+
+{% if query %}
+<h3>Results for "{{ query }}"</h3>
+{% endif %}
+
+<ul>
+{% for paper in papers %}
+
+<li>
+<b>{{ paper.title }}</b><br>
+Author: {{ paper.authors }}<br>
+Year: {{ paper.year }}<br>
+
+<a href="{{ paper.pdf_path }}" target="_blank">Download PDF</a>
+
+</li>
+
+<br>
+
+{% endfor %}
+</ul>
+
+{% if papers|length == 0 and query %}
+<p>No papers found.</p>
+{% endif %}

@@ -7,6 +7,10 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from ..extensions import db
 from ..models import Paper
+from flask import request
+from rapidfuzz import fuzz
+from flask_login import login_required
+from app.models import Paper
 
 
 papers_bp = Blueprint("papers", __name__)
@@ -92,3 +96,27 @@ def verify_paper(paper_id):
     db.session.commit()
     flash(f"Paper '{paper.title}' has been verified!", "success")
     return redirect(url_for("papers.list_papers"))
+
+
+
+@papers_bp.route("/search", methods=["GET", "POST"])
+@login_required
+def search_papers():
+
+    papers = []
+    query = ""
+
+    if request.method == "POST":
+        query = request.form.get("query")
+
+        all_papers = Paper.query.filter_by(verified=True).all()
+
+        for paper in all_papers:
+
+            title_score = fuzz.partial_ratio(query.lower(), paper.title.lower())
+            author_score = fuzz.partial_ratio(query.lower(), (paper.authors or "").lower())
+
+            if title_score > 60 or author_score > 60:
+                papers.append(paper)
+
+    return render_template("search_results.html", papers=papers, query=query)
