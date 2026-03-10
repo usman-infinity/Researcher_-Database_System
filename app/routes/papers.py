@@ -11,7 +11,7 @@ from flask import request
 from rapidfuzz import fuzz
 from flask_login import login_required
 from app.models import Paper
-
+from src.recommender.recommend import recommend_papers
 
 papers_bp = Blueprint("papers", __name__)
 
@@ -120,3 +120,19 @@ def search_papers():
                 papers.append(paper)
 
     return render_template("search_results.html", papers=papers, query=query)
+
+
+@papers_bp.route("/recommend/<int:paper_id>")
+def recommend(paper_id):
+
+    paper = Paper.query.get_or_404(paper_id)
+
+    papers = Paper.query.filter_by(status="approved").all()
+
+    recommendations = recommend_papers(papers, paper.title)
+
+    return render_template(
+        "recommendations.html",
+        paper=paper,
+        recommendations=recommendations
+    )
