@@ -12,6 +12,7 @@ from rapidfuzz import fuzz
 from flask_login import login_required
 from app.models import Paper
 from src.recommender.recommend import recommend_papers
+from src.summarizer.summarize import generate_summary
 
 papers_bp = Blueprint("papers", __name__)
 
@@ -135,4 +136,17 @@ def recommend(paper_id):
         "recommendations.html",
         paper=paper,
         recommendations=recommendations
+    )
+
+    @papers_bp.route("/summary/<int:paper_id>")
+def summary(paper_id):
+
+    paper = Paper.query.get_or_404(paper_id)
+
+    summary = generate_summary(paper.abstract)
+
+    return render_template(
+        "summary.html",
+        paper=paper,
+        summary=summary
     )
