@@ -1,15 +1,9 @@
 from transformers import pipeline
 
-# Load AI summarization model
-summarizer = pipeline("summarization")
+# This forces the pipeline to use a specific summarization model
+summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")
 
 def generate_summary(text):
-
-    result = summarizer(
-        text,
-        max_length=80,
-        min_length=25,
-        do_sample=False
-    )
-
-    return result[0]['summary_text']
+    # limit output to 50 tokens
+    result = summarizer(text, max_length=50, do_sample=False)
+    return result[0]['generated_text']

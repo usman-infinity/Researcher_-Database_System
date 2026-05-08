@@ -1,0 +1,20 @@
+<h2>{{ paper.title }}</h2>
+
+<h3>AI Paper Insights</h3>
+
+<p><strong>Abstract:</strong></p>
+<p>{{ paper.abstract }}</p>
+
+<h4>Top Keywords</h4>
+<ul>
+    {% for keyword in keywords %}
+        <li>{{ keyword }}</li>
+    {% else %}
+        <li>No keywords extracted.</li>
+    {% endfor %}
+</ul>
+
+<p>
+    <a href="{{ url_for('papers.summary', paper_id=paper.id) }}">View Summary</a> |
+    <a href="{{ url_for('papers.recommend', paper_id=paper.id) }}">View Recommendations</a>
+</p>

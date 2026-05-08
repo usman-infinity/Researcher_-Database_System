@@ -1,19 +1,26 @@
+import sys
 import os
-from flask import Blueprint, request, render_template, current_app, send_from_directory
+
+# Add src to path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../src")))
+
+# Flask imports
+from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, send_from_directory
+from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
+
+# Database models
 from app.models import Paper, Department
 from app.extensions import db
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_required, current_user
-from ..extensions import db
-from ..models import Paper
-from flask import request
-from rapidfuzz import fuzz
-from flask_login import login_required
-from app.models import Paper
-from src.recommender.recommend import recommend_papers
-from src.summarizer.summarize import generate_summary
 
+# AI / utilities
+from src.recommender.recommend import recommend_papers
+from src.summarizer.summarize import generate_summary, extract_keywords
+from rapidfuzz import fuzz
+
+# -------------------------------
+# Blueprint
+# -------------------------------
 papers_bp = Blueprint("papers", __name__)
 
 # Allowed file extensions
@@ -21,6 +28,16 @@ ALLOWED_EXTENSIONS = {"pdf"}
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# -------------------------------
+# Routes
+# -------------------------------
+
+@papers_bp.route("/summary/<int:paper_id>")
+def summary(paper_id):
+    paper = Paper.query.get_or_404(paper_id)
+    summary = generate_summary(paper.abstract)
+    return render_template("summary.html", paper=paper, summary=summary)
 
 @papers_bp.route("/upload", methods=["GET", "POST"])
 def upload_paper():
@@ -62,19 +79,15 @@ def upload_paper():
 
         db.session.add(paper)
         db.session.commit()
-
         return "Paper Uploaded Successfully"
 
-    # GET → show form
     return render_template("upload_paper.html")
 
-# List uploaded papers
 @papers_bp.route("/list")
 def list_papers():
     papers = Paper.query.all()
     return render_template("list_papers.html", papers=papers)
 
-# Download PDF
 @papers_bp.route("/download/<int:paper_id>")
 def download_paper(paper_id):
     paper = Paper.query.get_or_404(paper_id)
@@ -87,7 +100,6 @@ def download_paper(paper_id):
 @papers_bp.route("/verify/<int:paper_id>", methods=["POST"])
 @login_required
 def verify_paper(paper_id):
-    # Only admin can verify
     if current_user.role != "admin":
         flash("You are not authorized to verify papers.", "danger")
         return redirect(url_for("papers.list_papers"))
@@ -98,55 +110,31 @@ def verify_paper(paper_id):
     flash(f"Paper '{paper.title}' has been verified!", "success")
     return redirect(url_for("papers.list_papers"))
 
-
-
 @papers_bp.route("/search", methods=["GET", "POST"])
 @login_required
 def search_papers():
-
     papers = []
     query = ""
-
     if request.method == "POST":
         query = request.form.get("query")
-
         all_papers = Paper.query.filter_by(verified=True).all()
-
         for paper in all_papers:
-
             title_score = fuzz.partial_ratio(query.lower(), paper.title.lower())
             author_score = fuzz.partial_ratio(query.lower(), (paper.authors or "").lower())
-
             if title_score > 60 or author_score > 60:
                 papers.append(paper)
-
     return render_template("search_results.html", papers=papers, query=query)
-
 
 @papers_bp.route("/recommend/<int:paper_id>")
 def recommend(paper_id):
-
     paper = Paper.query.get_or_404(paper_id)
-
-    papers = Paper.query.filter_by(status="approved").all()
-
+    papers = Paper.query.filter_by(verified=True).all()
     recommendations = recommend_papers(papers, paper.title)
+    return render_template("recommendations.html", paper=paper, recommendations=recommendations)
 
-    return render_template(
-        "recommendations.html",
-        paper=paper,
-        recommendations=recommendations
-    )
 
-    @papers_bp.route("/summary/<int:paper_id>")
-def summary(paper_id):
-
+@papers_bp.route("/insights/<int:paper_id>")
+def insights(paper_id):
     paper = Paper.query.get_or_404(paper_id)
-
-    summary = generate_summary(paper.abstract)
-
-    return render_template(
-        "summary.html",
-        paper=paper,
-        summary=summary
-    )
+    keywords = extract_keywords(paper.abstract)
+    return render_template("insights.html", paper=paper, keywords=keywords)

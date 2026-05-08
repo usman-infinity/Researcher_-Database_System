@@ -5,4 +5,4 @@
 <li>{{ paper.title }}</li>
 {% endfor %}
 </ul>
-<a href="/recommend/{{ paper.id }}">See Similar Papers</a>
+<a href="{{ url_for('papers.recommend', paper_id=paper.id) }}">See Similar Papers</a>

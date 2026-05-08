@@ -1,70 +1,82 @@
 # 🧠 Research System
 
-![Project Banner](https://via.placeholder.com/1200x300.png?text=Research+System+Project)
+![Project Banner](banner.png)
 
-[![Python](https://img.shields.io/badge/Python-3.10+-blue)](https://www.python.org/) 
-[![Flask](https://img.shields.io/badge/Flask-Web%20Framework-orange)](https://flask.palletsprojects.com/) 
-[![GitHub](https://img.shields.io/badge/GitHub-Repository-black)](https://github.com/usman-infinity/Researcher_-Database_System)
+[![Python](https://img.shields.io/badge/Python-3.10+-blue)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-Web%20Framework-orange)](https://flask.palletsprojects.com/)
+[![License](https://img.shields.io/badge/License-MIT-green)]()
 
 ---
 
 ## 🚀 Project Overview
 
-A full-stack AI-powered platform to **manage, upload, and search research papers**.  
-This system is built **phase by phase**, implementing:
+Research System is a **full-stack AI-powered platform** for managing, uploading, searching, and analyzing research papers.
 
-- Database models  
-- User authentication  
-- Paper upload & admin approval  
-- Intelligent search system using **RapidFuzz**  
+The system allows users to upload papers, administrators to verify them, and users to discover relevant research using **AI-powered search, recommendations, and summarization**.
 
 ---
 
 ## 📂 Project Phases
 
 | Phase | Feature | Status |
-|-------|---------|--------|
-| 1 | Project Setup | ✅ |
-| 2 | Database Models | ✅ |
-| 3 | Authentication System | ✅ |
-| 4 | Paper Upload System | ✅ |
-| 5 | Admin Approval Dashboard | ✅ |
-| 6 | Paper Search System | ✅ |
-| 7 | AI Recommendation System | ⏳ |
+|------|--------|--------|
+| Phase 1 | Project Setup | ✅ |
+| Phase 2 | Database Models | ✅ |
+| Phase 3 | Authentication System | ✅ |
+| Phase 4 | Paper Upload System | ✅ |
+| Phase 5 | Admin Approval Dashboard | ✅ |
+| Phase 6 | Intelligent Paper Search | ✅ |
+| Phase 7 | AI Recommendation System | ✅ |
+| Phase 8 | AI Paper Summarization | ✅ |
+| Phase 9 | AI Paper Insights | ⬜ |
 
 ---
 
-## 🔍 Phase 6: Paper Search System
+## 🔍 Key Features
 
-- Intelligent research paper search using **RapidFuzz**  
-- Filtered search results to show only verified papers  
-- Integrated dashboard search button for convenience  
+### 📄 Paper Management
+- Upload research papers
+- Admin verification system
+- Approved paper dashboard
+
+### 🔎 Intelligent Search
+- RapidFuzz fuzzy search
+- Find similar paper titles
+- Fast research discovery
+
+### 🤖 AI Recommendation System
+- Suggests similar research papers
+- Uses **TF-IDF + Cosine Similarity**
+- Helps users discover related work
+
+### ✨ AI Paper Summarization
+- Automatically summarizes research abstracts
+- Built using **Transformers NLP models**
 
 ---
 
 ## 🛠 Technologies Used
 
-- **Python 3.10+**  
-- **Flask** – Web framework  
-- **SQLAlchemy** – Database ORM  
-- **RapidFuzz** – Fuzzy search engine  
-- **Bootstrap / HTML / CSS** – Frontend  
+Backend:
+- Python
+- Flask
+- SQLAlchemy
+
+AI / Machine Learning:
+- RapidFuzz
+- Scikit-learn
+- Transformers
+
+Frontend:
+- HTML
+- CSS
+- Bootstrap
 
 ---
 
-## ⚡ Installation & Usage
+## ⚙️ Installation
+
+Clone the repository:
 
 ```bash
-# Clone repository
-git clone https://github.com/usman-infinity/Researcher_-Database_System.git
-cd research_system
-
-# Create virtual environment
-python -m venv research_env
-research_env\Scripts\activate   # Windows
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the application
-python run.py
+git clone https://github.com/yourusername/research-system.git

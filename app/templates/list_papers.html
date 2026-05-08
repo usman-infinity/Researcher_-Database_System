@@ -36,6 +36,9 @@
                         <button type="submit">Verify</button>
                     </form>
                 {% endif %}
+                <a href="{{ url_for('papers.summary', paper_id=paper.id) }}">Summary</a> |
+                <a href="{{ url_for('papers.insights', paper_id=paper.id) }}">Insights</a> |
+                <a href="{{ url_for('papers.recommend', paper_id=paper.id) }}">Recommend</a>
             </td>
         </tr>
     {% endfor %}
