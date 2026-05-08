@@ -32,6 +32,7 @@ class User(UserMixin, db.Model):
 
     papers = db.relationship("Paper", backref="author", lazy=True)
 
+    approved = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}User Approvals{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="h3 mb-1">User Approvals</h1>
+        <p class="text-muted mb-0">Approve new user accounts before they are allowed to log in.</p>
+    </div>
+</div>
+<div class="card card-shadow">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Department</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.role|capitalize }}</td>
+                        <td>{{ user.department.name if user.department else 'N/A' }}</td>
+                        <td>
+                            {% if user.approved %}
+                            <span class="badge bg-success">Approved</span>
+                            {% else %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                {% if not user.approved %}
+                                <a class="btn btn-sm btn-success" href="{{ url_for('admin.approve_user', user_id=user.id) }}">Approve</a>
+                                {% else %}
+                                <span class="text-muted">—</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

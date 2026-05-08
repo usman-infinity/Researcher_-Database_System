@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, render_template
 from .extensions import db, login_manager, migrate
 from .routes.auth import auth_bp
 from app.routes.papers import papers_bp 
@@ -23,6 +23,17 @@ def create_app():
 
     @app.route("/")
     def home():
-        return redirect(url_for("papers.list_papers"))
+        from .models import Paper
+
+        recent_papers = Paper.query.order_by(Paper.created_at.desc()).limit(4).all()
+        total_papers = Paper.query.count()
+        verified_count = Paper.query.filter_by(verified=True).count()
+
+        return render_template(
+            "home.html",
+            recent_papers=recent_papers,
+            total_papers=total_papers,
+            verified_count=verified_count,
+        )
 
     return app

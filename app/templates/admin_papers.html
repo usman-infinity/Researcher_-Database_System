@@ -2,9 +2,14 @@
 {% block title %}Admin Panel{% endblock %}
 {% block content %}
 <div class="page-header">
-    <div>
-        <h1 class="h3 mb-1">Admin Panel</h1>
-        <p class="text-muted mb-0">Review pending papers and approve verified research submissions.</p>
+    <div class="d-flex flex-column flex-md-row justify-content-between gap-3 align-items-start">
+        <div>
+            <h1 class="h3 mb-1">Admin Panel</h1>
+            <p class="text-muted mb-0">Review pending papers and approve verified research submissions.</p>
+        </div>
+        <div>
+            <a class="btn btn-outline-primary" href="{{ url_for('admin.view_users') }}">User Approvals</a>
+        </div>
     </div>
 </div>
 <div class="card card-shadow">
@@ -34,11 +39,16 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if not paper.verified %}
-                            <a class="btn btn-sm btn-success" href="{{ url_for('admin.approve_paper', paper_id=paper.id) }}">Approve</a>
-                            {% else %}
-                            —
-                            {% endif %}
+                            <div class="d-flex gap-2">
+                                {% if not paper.verified %}
+                                <a class="btn btn-sm btn-success" href="{{ url_for('admin.approve_paper', paper_id=paper.id) }}">Approve</a>
+                                {% else %}
+                                <span class="text-muted">—</span>
+                                {% endif %}
+                                <form method="POST" action="{{ url_for('admin.delete_paper', paper_id=paper.id) }}" class="mb-0">
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}

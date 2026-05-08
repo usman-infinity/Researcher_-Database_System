@@ -21,6 +21,10 @@ def login():
             flash("Invalid credentials", "danger")
             return redirect(url_for('auth.login'))
 
+        if not user.approved and user.role != 'admin':
+            flash("Your account is pending admin approval.", "warning")
+            return redirect(url_for('auth.login'))
+
         login_user(user)
         flash(f"Welcome {user.name}", "success")
         return redirect(url_for('auth.dashboard'))
@@ -49,11 +53,12 @@ def register():
             name=name,
             email=email,
             password=hashed_password,
-            department_id=department_id
+            department_id=department_id,
+            approved=False
         )
         db.session.add(user)
         db.session.commit()
-        flash("User registered successfully", "success")
+        flash("Registration successful. Your account will be approved by an admin before login.", "success")
         return redirect(url_for('auth.login'))
 
     departments = Department.query.all()

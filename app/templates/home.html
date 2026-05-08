@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Home{% endblock %}
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="display-5 fw-bold">Research at your fingertips.</h1>
+                <p class="lead mb-4">Browse verified papers, upload new research, and explore AI-powered summaries and recommendations from one polished dashboard.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{{ url_for('papers.list_papers') }}" class="btn btn-light btn-lg">View Papers</a>
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('papers.upload_paper') }}" class="btn btn-outline-light btn-lg">Upload Paper</a>
+                    {% else %}
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg">Login to Upload</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-5 mt-4 mt-lg-0">
+                <div class="card card-shadow p-4 bg-white text-dark">
+                    <h5 class="mb-3">System Snapshot</h5>
+                    <div class="row text-center gy-3">
+                        <div class="col-6">
+                            <div class="rounded-4 bg-light p-3">
+                                <div class="h2 mb-1">{{ total_papers }}</div>
+                                <div class="stats-badge text-muted">Total Papers</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="rounded-4 bg-light p-3">
+                                <div class="h2 mb-1">{{ verified_count }}</div>
+                                <div class="stats-badge text-muted">Verified</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-muted mt-3 mb-0">Instant insights, clean navigation, and rapid paper discovery for your research team.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card feature-card h-100 p-4">
+            <h5>Upload Research</h5>
+            <p class="text-muted">Submit your latest paper and keep the database current with fresh findings.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card feature-card h-100 p-4">
+            <h5>AI Summaries</h5>
+            <p class="text-muted">Generate quick summaries from abstracts and preview paper insights in seconds.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card feature-card h-100 p-4">
+            <h5>Smart Recommendations</h5>
+            <p class="text-muted">Find related papers instantly with relevance-powered recommendations.</p>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="h4 mb-1">Latest Papers</h2>
+        <p class="text-muted mb-0">Fresh uploads and recently verified research from the repository.</p>
+    </div>
+    <a href="{{ url_for('papers.list_papers') }}" class="btn btn-sm btn-primary">View all papers</a>
+</div>
+
+{% if recent_papers %}
+<div class="row g-4">
+    {% for paper in recent_papers %}
+    <div class="col-lg-6">
+        <div class="card card-shadow h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ paper.title }}</h5>
+                <p class="text-muted mb-2">{{ paper.authors }} • {{ paper.year }}</p>
+                <p class="mb-3 text-muted">Department: {{ paper.department.name if paper.department else 'N/A' }}</p>
+                <div class="d-flex flex-wrap gap-2 align-items-center">
+                    <span class="badge bg-{{ 'success' if paper.verified else 'warning text-dark' }}">{{ 'Verified' if paper.verified else 'Pending' }}</span>
+                    <a class="btn btn-sm btn-outline-primary" href="{{ url_for('papers.summary', paper_id=paper.id) }}">Summary</a>
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('papers.insights', paper_id=paper.id) }}">Insights</a>
+                    <a class="btn btn-sm btn-outline-info" href="{{ url_for('papers.recommend', paper_id=paper.id) }}">Recommend</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card card-shadow p-4 text-center">
+    <h2 class="h5">No papers available yet.</h2>
+    <p class="text-muted">Upload a paper to populate the repository and start discovering insights.</p>
+    {% if current_user.is_authenticated %}
+    <a href="{{ url_for('papers.upload_paper') }}" class="btn btn-primary">Upload a Paper</a>
+    {% else %}
+    <a href="{{ url_for('auth.login') }}" class="btn btn-primary">Login to upload</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
