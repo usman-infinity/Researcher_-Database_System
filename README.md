@@ -12,7 +12,7 @@
 
 Research System is a **full-stack AI-powered platform** for managing, uploading, searching, and analyzing research papers.
 
-The system allows users to upload papers, administrators to verify them, and users to discover relevant research using **AI-powered search, recommendations, and summarization**.
+The system allows users to upload papers, administrators to verify them, and users to discover relevant research using **AI-powered search, recommendations, summarization, and insights**.
 
 ---
 
@@ -52,6 +52,11 @@ The system allows users to upload papers, administrators to verify them, and use
 ### ✨ AI Paper Summarization
 - Automatically summarizes research abstracts
 - Built using **Transformers NLP models**
+
+### 🔍 AI Paper Insights
+- Extracts key keywords from paper abstracts using TF-IDF
+- Provides deeper analysis and metadata for research papers
+- Helps users understand paper content at a glance
 
 ---
 
