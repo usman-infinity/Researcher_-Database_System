@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect, url_for
 from .extensions import db, login_manager, migrate
 from .routes.auth import auth_bp
 from app.routes.papers import papers_bp 
@@ -20,5 +20,9 @@ def create_app():
     app.register_blueprint(papers_bp, url_prefix="/papers")
     app.register_blueprint(admin_bp)         # admin routes
     app.register_blueprint(dashboard_bp)     # dashboard routes
+
+    @app.route("/")
+    def home():
+        return redirect(url_for("papers.list_papers"))
 
     return app
