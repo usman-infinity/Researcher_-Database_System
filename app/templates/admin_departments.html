@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Department Management{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div class="d-flex flex-column flex-md-row justify-content-between gap-3 align-items-start">
+        <div>
+            <h1 class="h3 mb-1">Department Management</h1>
+            <p class="text-muted mb-0">Create and manage departments for organizing users and papers.</p>
+        </div>
+        <div>
+            <a class="btn btn-primary" href="{{ url_for('admin.dashboard') }}">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+
+<!-- Add Department Form -->
+<div class="card card-shadow mb-4">
+    <div class="card-header border-bottom">
+        <h5 class="card-title mb-0">Create New Department</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('admin.add_department') }}">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <input type="text" name="name" class="form-control" placeholder="Department Name (e.g., Computer Science, Biology, Mathematics)" required>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">Create Department</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Departments List -->
+<div class="card card-shadow">
+    <div class="card-header border-bottom">
+        <h5 class="card-title mb-0">All Departments</h5>
+    </div>
+    <div class="card-body">
+        {% if departments %}
+        <div class="table-responsive">
+            <table class="table table-striped align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Department Name</th>
+                        <th>Users</th>
+                        <th>Papers</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dept in departments %}
+                    <tr>
+                        <td>
+                            <strong>{{ dept.name }}</strong>
+                        </td>
+                        <td>
+                            <span class="badge bg-info">{{ dept.users|length }} users</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-success">{{ dept.papers|length }} papers</span>
+                        </td>
+                        <td>
+                            <form method="POST" action="{{ url_for('admin.delete_department', dept_id=dept.id) }}" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this department?');">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted mb-0">No departments created yet. Create one using the form above.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

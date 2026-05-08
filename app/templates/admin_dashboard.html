@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="h3 mb-1">Admin Dashboard</h1>
+        <p class="text-muted mb-0">Manage users, papers, departments, and system resources.</p>
+    </div>
+</div>
+
+<!-- Statistics Overview -->
+<div class="row g-3 mb-4">
+    <div class="col-md-6 col-lg-3">
+        <div class="card card-shadow h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-muted small mb-1">Total Users</p>
+                        <h3 class="h4 mb-0">{{ stats.total_users }}</h3>
+                    </div>
+                    <span class="badge bg-primary">👥</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card card-shadow h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-muted small mb-1">Pending Approvals</p>
+                        <h3 class="h4 mb-0">{{ stats.pending_users }}</h3>
+                    </div>
+                    <span class="badge bg-warning">⏳</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card card-shadow h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-muted small mb-1">Admin Accounts</p>
+                        <h3 class="h4 mb-0">{{ stats.admin_count }}</h3>
+                    </div>
+                    <span class="badge bg-danger">⚙️</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card card-shadow h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-muted small mb-1">Departments</p>
+                        <h3 class="h4 mb-0">{{ stats.total_departments }}</h3>
+                    </div>
+                    <span class="badge bg-info">🏢</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-6 col-lg-3">
+        <div class="card card-shadow h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-muted small mb-1">Total Papers</p>
+                        <h3 class="h4 mb-0">{{ stats.total_papers }}</h3>
+                    </div>
+                    <span class="badge bg-success">📄</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card card-shadow h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-muted small mb-1">Pending Papers</p>
+                        <h3 class="h4 mb-0">{{ stats.pending_papers }}</h3>
+                    </div>
+                    <span class="badge bg-warning">📋</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card card-shadow h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-muted small mb-1">Verified Papers</p>
+                        <h3 class="h4 mb-0">{{ stats.verified_papers }}</h3>
+                    </div>
+                    <span class="badge bg-success">✅</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Management Navigation -->
+<div class="row g-3 mb-4">
+    <div class="col-md-6 col-lg-4">
+        <a href="{{ url_for('admin.view_users') }}" class="card card-shadow text-decoration-none h-100 hover" style="transition: transform 0.2s, box-shadow 0.2s;">
+            <div class="card-body text-center">
+                <h5 class="card-title mb-2">👥 User Management</h5>
+                <p class="card-text small text-muted">Approve, promote, or manage user accounts</p>
+                <span class="badge bg-primary">{{ stats.pending_users }} Pending</span>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <a href="{{ url_for('admin.view_papers') }}" class="card card-shadow text-decoration-none h-100 hover" style="transition: transform 0.2s, box-shadow 0.2s;">
+            <div class="card-body text-center">
+                <h5 class="card-title mb-2">📄 Paper Management</h5>
+                <p class="card-text small text-muted">Review, verify, and manage research papers</p>
+                <span class="badge bg-warning text-dark">{{ stats.pending_papers }} Pending</span>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <a href="{{ url_for('admin.view_departments') }}" class="card card-shadow text-decoration-none h-100 hover" style="transition: transform 0.2s, box-shadow 0.2s;">
+            <div class="card-body text-center">
+                <h5 class="card-title mb-2">🏢 Department Management</h5>
+                <p class="card-text small text-muted">Create, edit, and manage departments</p>
+                <span class="badge bg-info">{{ stats.total_departments }} Total</span>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row g-3">
+    <div class="col-lg-6">
+        <div class="card card-shadow">
+            <div class="card-header border-bottom">
+                <h5 class="card-title mb-0">Recent User Registrations</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_users %}
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in recent_users %}
+                            <tr>
+                                <td><small>{{ user.name }}</small></td>
+                                <td><small>{{ user.email }}</small></td>
+                                <td>
+                                    {% if user.approved %}
+                                    <span class="badge bg-success">Approved</span>
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted mb-0">No recent registrations.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card card-shadow">
+            <div class="card-header border-bottom">
+                <h5 class="card-title mb-0">Recent Paper Submissions</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_papers %}
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Title</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for paper in recent_papers %}
+                            <tr>
+                                <td><small><a href="#" class="text-decoration-none">{{ paper.title[:30] }}...</a></small></td>
+                                <td>
+                                    {% if paper.verified %}
+                                    <span class="badge bg-success">Verified</span>
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted mb-0">No recent submissions.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 35px rgba(0, 0, 0, 0.1) !important;
+    }
+</style>
+{% endblock %}

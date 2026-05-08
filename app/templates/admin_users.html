@@ -2,11 +2,40 @@
 {% block title %}User Approvals{% endblock %}
 {% block content %}
 <div class="page-header">
-    <div>
-        <h1 class="h3 mb-1">User Approvals</h1>
-        <p class="text-muted mb-0">Approve new user accounts before they are allowed to log in.</p>
+    <div class="d-flex flex-column flex-md-row justify-content-between gap-3 align-items-start">
+        <div>
+            <h1 class="h3 mb-1">User Management</h1>
+            <p class="text-muted mb-0">Approve new user accounts, manage permissions, and administer roles.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a class="btn btn-outline-primary" href="{{ url_for('admin.view_papers') }}">Paper Management</a>
+            <a class="btn btn-outline-secondary" href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+        </div>
     </div>
 </div>
+
+<!-- Filter and Search -->
+<div class="card card-shadow mb-4">
+    <div class="card-body">
+        <form method="GET" action="{{ url_for('admin.view_users') }}" class="row g-3">
+            <div class="col-md-6">
+                <input type="text" name="search" class="form-control" placeholder="Search by name or email..." value="{{ search }}">
+            </div>
+            <div class="col-md-3">
+                <select name="status" class="form-select">
+                    <option value="all" {% if filter_status == 'all' %}selected{% endif %}>All Users</option>
+                    <option value="pending" {% if filter_status == 'pending' %}selected{% endif %}>Pending Approval</option>
+                    <option value="approved" {% if filter_status == 'approved' %}selected{% endif %}>Approved</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Users Table -->
 <div class="card card-shadow">
     <div class="card-body">
         <div class="table-responsive">
@@ -24,9 +53,9 @@
                 <tbody>
                     {% for user in users %}
                     <tr>
-                        <td>{{ user.name }}</td>
+                        <td><strong>{{ user.name }}</strong></td>
                         <td>{{ user.email }}</td>
-                        <td>{{ user.role|capitalize }}</td>
+                        <td><span class="badge {% if user.role == 'admin' %}bg-danger{% else %}bg-info{% endif %}">{{ user.role|capitalize }}</span></td>
                         <td>{{ user.department.name if user.department else 'N/A' }}</td>
                         <td>
                             {% if user.approved %}
@@ -37,10 +66,22 @@
                         </td>
                         <td>
                             <div class="d-flex gap-2">
-                                {% if not user.approved %}
-                                <a class="btn btn-sm btn-success" href="{{ url_for('admin.approve_user', user_id=user.id) }}">Approve</a>
+                                {% if user.email == 'usmaniainfinity@gmail.com' %}
+                                <span class="badge bg-danger">Super Admin</span>
                                 {% else %}
-                                <span class="text-muted">—</span>
+                                    {% if not user.approved %}
+                                    <a class="btn btn-sm btn-success" href="{{ url_for('admin.approve_user', user_id=user.id) }}" title="Approve User">✓</a>
+                                    <form method="POST" action="{{ url_for('admin.reject_user', user_id=user.id) }}" style="display:inline;">
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Reject this user?');" title="Reject User">✕</button>
+                                    </form>
+                                    {% endif %}
+                                    {% if user.role != 'admin' %}
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.promote_user', user_id=user.id) }}" title="Promote to Admin">↑ Admin</a>
+                                    {% else %}
+                                    <form method="POST" action="{{ url_for('admin.demote_user', user_id=user.id) }}" style="display:inline;">
+                                        <button type="submit" class="btn btn-sm btn-outline-warning" onclick="return confirm('Demote this user to faculty?');" title="Demote to Faculty">↓ Faculty</button>
+                                    </form>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </td>
@@ -52,3 +93,4 @@
     </div>
 </div>
 {% endblock %}
+

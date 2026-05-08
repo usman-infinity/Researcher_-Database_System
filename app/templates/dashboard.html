@@ -11,7 +11,7 @@
         <a class="list-group-item list-group-item-action" href="{{ url_for('papers.upload_paper') }}">Upload New Paper</a>
         {% endif %}
         {% if user.role == 'admin' %}
-        <a class="list-group-item list-group-item-action" href="{{ url_for('admin.view_papers') }}">Admin Panel</a>
+        <a class="list-group-item list-group-item-action" href="{{ url_for('admin.dashboard') }}">Admin Dashboard</a>
         {% endif %}
     </div>
 </div>

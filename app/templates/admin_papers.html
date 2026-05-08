@@ -4,16 +4,41 @@
 <div class="page-header">
     <div class="d-flex flex-column flex-md-row justify-content-between gap-3 align-items-start">
         <div>
-            <h1 class="h3 mb-1">Admin Panel</h1>
+            <h1 class="h3 mb-1">Paper Management</h1>
             <p class="text-muted mb-0">Review pending papers and approve verified research submissions.</p>
         </div>
-        <div>
+        <div class="d-flex gap-2">
             <a class="btn btn-outline-primary" href="{{ url_for('admin.view_users') }}">User Approvals</a>
+            <a class="btn btn-outline-secondary" href="{{ url_for('admin.dashboard') }}">Dashboard</a>
         </div>
     </div>
 </div>
+
+<!-- Filter and Search -->
+<div class="card card-shadow mb-4">
+    <div class="card-body">
+        <form method="GET" action="{{ url_for('admin.view_papers') }}" class="row g-3">
+            <div class="col-md-6">
+                <input type="text" name="search" class="form-control" placeholder="Search by title or authors..." value="{{ search }}">
+            </div>
+            <div class="col-md-3">
+                <select name="status" class="form-select">
+                    <option value="all" {% if filter_status == 'all' %}selected{% endif %}>All Papers</option>
+                    <option value="pending" {% if filter_status == 'pending' %}selected{% endif %}>Pending Review</option>
+                    <option value="verified" {% if filter_status == 'verified' %}selected{% endif %}>Verified</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Papers Table -->
 <div class="card card-shadow">
     <div class="card-body">
+        {% if papers %}
         <div class="table-responsive">
             <table class="table table-striped align-middle mb-0">
                 <thead class="table-light">
@@ -21,6 +46,7 @@
                         <th>Title</th>
                         <th>Authors</th>
                         <th>Year</th>
+                        <th>Submitted By</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -28,9 +54,15 @@
                 <tbody>
                     {% for paper in papers %}
                     <tr>
-                        <td>{{ paper.title }}</td>
+                        <td>
+                            <strong>{{ paper.title }}</strong>
+                            {% if paper.abstract %}
+                            <br><small class="text-muted">{{ paper.abstract[:80] }}...</small>
+                            {% endif %}
+                        </td>
                         <td>{{ paper.authors }}</td>
                         <td>{{ paper.year }}</td>
+                        <td>{{ paper.author.name if paper.author else 'Unknown' }}</td>
                         <td>
                             {% if paper.verified %}
                             <span class="badge bg-success">Verified</span>
@@ -41,12 +73,14 @@
                         <td>
                             <div class="d-flex gap-2">
                                 {% if not paper.verified %}
-                                <a class="btn btn-sm btn-success" href="{{ url_for('admin.approve_paper', paper_id=paper.id) }}">Approve</a>
+                                <a class="btn btn-sm btn-success" href="{{ url_for('admin.approve_paper', paper_id=paper.id) }}" title="Approve Paper">✓</a>
                                 {% else %}
-                                <span class="text-muted">—</span>
+                                <form method="POST" action="{{ url_for('admin.reject_paper', paper_id=paper.id) }}" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-warning" title="Mark as Unverified">↺</button>
+                                </form>
                                 {% endif %}
-                                <form method="POST" action="{{ url_for('admin.delete_paper', paper_id=paper.id) }}" class="mb-0">
-                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                <form method="POST" action="{{ url_for('admin.delete_paper', paper_id=paper.id) }}" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this paper?');" title="Delete Paper">✕</button>
                                 </form>
                             </div>
                         </td>
@@ -55,6 +89,10 @@
                 </tbody>
             </table>
         </div>
+        {% else %}
+        <p class="text-muted mb-0">No papers found matching your criteria.</p>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
+

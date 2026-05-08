@@ -6,17 +6,18 @@ app = create_app()
 
 with app.app_context():
     # Check if admin already exists
-    admin_email = "admin@university.com"
+    admin_email = "usmaniainfinity@gmail.com"
     existing_admin = User.query.filter_by(email=admin_email).first()
     
     if existing_admin:
         print("Admin already exists.")
     else:
         admin = User(
-            name="Admin User",
+            name="Usmaan",
             email=admin_email,
-            password=generate_password_hash("Admin@123"),  # fixed
-            role="admin"
+            password=generate_password_hash("@1402"),
+            role="admin",
+            approved=True
         )
         db.session.add(admin)
         db.session.commit()
