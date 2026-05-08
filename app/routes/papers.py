@@ -47,9 +47,10 @@ def upload_paper():
         authors = request.form.get("authors")
         year = request.form.get("year")
         department_name = request.form.get("department")
+        abstract = request.form.get("abstract")
         pdf_file = request.files.get("pdf_file")
 
-        if not (title and authors and year and department_name):
+        if not (title and authors and year and department_name and abstract):
             return "All fields are required", 400
 
         # Check file
@@ -75,7 +76,9 @@ def upload_paper():
             authors=authors,
             year=int(year),
             department=dept,
-            pdf_path=pdf_path
+            abstract=abstract,
+            pdf_path=pdf_path,
+            user_id=current_user.id
         )
 
         db.session.add(paper)

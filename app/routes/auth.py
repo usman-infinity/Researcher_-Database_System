@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
 from ..extensions import db, login_manager
-from ..models import User, Department
+from ..models import User, Department, Paper
 
 auth_bp = Blueprint('auth', __name__, template_folder='../templates/auth')
 
@@ -82,7 +82,18 @@ def logout():
 @auth_bp.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html', user=current_user)
+    # Calculate statistics for the user
+    total_papers = Paper.query.count()
+    user_papers = Paper.query.filter_by(user_id=current_user.id).count()
+    pending_papers = Paper.query.filter_by(user_id=current_user.id, verified=False).count()
+    verified_papers = Paper.query.filter_by(user_id=current_user.id, verified=True).count()
+    
+    return render_template('auth/dashboard.html', 
+                         user=current_user,
+                         total_papers=total_papers,
+                         user_papers=user_papers,
+                         pending_papers=pending_papers,
+                         verified_papers=verified_papers)
 
 
 # ----------------------
