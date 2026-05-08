@@ -1,19 +1,15 @@
-from transformers import pipeline
-from sklearn.feature_extraction.text import TfidfVectorizer
-
-# Load AI summarization model
-summarizer = pipeline("summarization")
-
+# Simple summarization without heavy dependencies
 def generate_summary(text):
+    if not text:
+        return "No text provided for summarization."
 
-    result = summarizer(
-        text,
-        max_length=80,
-        min_length=25,
-        do_sample=False
-    )
-
-    return result[0]['summary_text']
+    # Simple extractive summary: take first few sentences
+    sentences = text.split('.')
+    summary_sentences = sentences[:3]  # Take first 3 sentences
+    summary = '. '.join([s.strip() for s in summary_sentences if s.strip()])
+    if not summary.endswith('.'):
+        summary += '.'
+    return summary[:200] + '...' if len(summary) > 200 else summary
 
 
 def extract_keywords(text, top_n=8):
