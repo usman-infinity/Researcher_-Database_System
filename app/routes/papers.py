@@ -40,6 +40,7 @@ def summary(paper_id):
     return render_template("summary.html", paper=paper, summary=summary)
 
 @papers_bp.route("/upload", methods=["GET", "POST"])
+@login_required
 def upload_paper():
     if request.method == "POST":
         title = request.form.get("title")
@@ -81,7 +82,7 @@ def upload_paper():
         db.session.commit()
         return "Paper Uploaded Successfully"
 
-    return render_template("upload_paper.html")
+    return render_template("auth/upload_paper.html")
 
 @papers_bp.route("/list")
 def list_papers():

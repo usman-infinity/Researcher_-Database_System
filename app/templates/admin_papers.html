@@ -1,44 +1,50 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Admin Panel</title>
-</head>
-<body>
-
-<h2>Research Papers</h2>
-
-<table border="1">
-<tr>
-<th>Title</th>
-<th>Authors</th>
-<th>Year</th>
-<th>Status</th>
-<th>Action</th>
-</tr>
-
-{% for paper in papers %}
-<tr>
-<td>{{ paper.title }}</td>
-<td>{{ paper.authors }}</td>
-<td>{{ paper.year }}</td>
-<td>
-{% if paper.verified %}
-Verified
-{% else %}
-Pending
-{% endif %}
-</td>
-
-<td>
-{% if not paper.verified %}
-<a href="/admin/approve/{{paper.id}}">Approve</a>
-{% endif %}
-</td>
-
-</tr>
-{% endfor %}
-
-</table>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Admin Panel{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="h3 mb-1">Admin Panel</h1>
+        <p class="text-muted mb-0">Review pending papers and approve verified research submissions.</p>
+    </div>
+</div>
+<div class="card card-shadow">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Title</th>
+                        <th>Authors</th>
+                        <th>Year</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for paper in papers %}
+                    <tr>
+                        <td>{{ paper.title }}</td>
+                        <td>{{ paper.authors }}</td>
+                        <td>{{ paper.year }}</td>
+                        <td>
+                            {% if paper.verified %}
+                            <span class="badge bg-success">Verified</span>
+                            {% else %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not paper.verified %}
+                            <a class="btn btn-sm btn-success" href="{{ url_for('admin.approve_paper', paper_id=paper.id) }}">Approve</a>
+                            {% else %}
+                            —
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

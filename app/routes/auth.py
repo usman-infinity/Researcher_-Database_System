@@ -25,7 +25,7 @@ def login():
         flash(f"Welcome {user.name}", "success")
         return redirect(url_for('auth.dashboard'))
 
-    return render_template('login.html')
+    return render_template('auth/login.html')
 
 
 # ----------------------
@@ -57,7 +57,7 @@ def register():
         return redirect(url_for('auth.login'))
 
     departments = Department.query.all()
-    return render_template('register.html', departments=departments)
+    return render_template('auth/register.html', departments=departments)
 
 
 # ----------------------

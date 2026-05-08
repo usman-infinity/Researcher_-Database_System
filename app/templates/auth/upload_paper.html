@@ -1,18 +1,44 @@
-<form method="POST" action="/papers/upload" enctype="multipart/form-data">
-    <label>Title:</label><br>
-    <input type="text" name="title" required><br><br>
-
-    <label>Authors:</label><br>
-    <input type="text" name="authors" required><br><br>
-
-    <label>Year:</label><br>
-    <input type="number" name="year" required><br><br>
-
-    <label>Department:</label><br>
-    <input type="text" name="department" required><br><br>
-
-    <label>PDF File:</label><br>
-    <input type="file" name="pdf_file" accept=".pdf"><br><br>
-
-    <button type="submit">Upload Paper</button>
-</form>
+{% extends "base.html" %}
+{% block title %}Upload Paper{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="h3 mb-1">Upload Paper</h1>
+        <p class="text-muted mb-0">Submit a new research paper and make it available for summary, insight, and recommendation tools.</p>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card card-shadow">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Upload Research Paper</h2>
+                <form method="POST" action="{{ url_for('papers.upload_paper') }}" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Title</label>
+                        <input type="text" class="form-control" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Authors</label>
+                        <input type="text" class="form-control" name="authors" required>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Year</label>
+                            <input type="number" class="form-control" name="year" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Department</label>
+                            <input type="text" class="form-control" name="department" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">PDF File</label>
+                        <input type="file" class="form-control" name="pdf_file" accept=".pdf">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload Paper</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

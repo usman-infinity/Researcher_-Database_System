@@ -1,33 +1,54 @@
-<h2>Search Research Papers</h2>
-
-<form method="POST">
-    <input type="text" name="query" placeholder="Search by title or author" required>
-    <button type="submit">Search</button>
-</form>
-
-<hr>
+{% extends "base.html" %}
+{% block title %}Search Papers{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="h3 mb-1">Search Papers</h1>
+        <p class="text-muted mb-0">Search verified papers by title or author.</p>
+    </div>
+</div>
+<div class="card card-shadow mb-4">
+    <div class="card-body">
+        <form method="POST" class="row g-2 align-items-end">
+            <div class="col-md-9">
+                <label class="form-label visually-hidden" for="searchQuery">Search query</label>
+                <input id="searchQuery" type="text" class="form-control" name="query" placeholder="Search by title or author" required value="{{ query }}">
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 {% if query %}
-<h3>Results for "{{ query }}"</h3>
+<div class="mb-3">
+    <h5 class="mb-1">Results for "{{ query }}"</h5>
+    <p class="text-muted">{{ papers|length }} paper{{ '' if papers|length == 1 else 's' }} found.</p>
+</div>
 {% endif %}
 
-<ul>
-{% for paper in papers %}
-
-<li>
-<b>{{ paper.title }}</b><br>
-Author: {{ paper.authors }}<br>
-Year: {{ paper.year }}<br>
-
-<a href="{{ paper.pdf_path }}" target="_blank">Download PDF</a>
-
-</li>
-
-<br>
-
-{% endfor %}
-</ul>
-
-{% if papers|length == 0 and query %}
-<p>No papers found.</p>
+{% if papers %}
+<div class="row g-3">
+    {% for paper in papers %}
+    <div class="col-12">
+        <div class="card card-shadow">
+            <div class="card-body d-md-flex justify-content-between align-items-center gap-3">
+                <div>
+                    <h5 class="card-title mb-1">{{ paper.title }}</h5>
+                    <p class="card-text text-muted mb-2">{{ paper.authors }} • {{ paper.year }}</p>
+                </div>
+                <div>
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('papers.download_paper', paper_id=paper.id) }}">Download PDF</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% elif query %}
+<div class="card card-shadow p-4 text-center">
+    <p class="mb-0">No papers matched your search. Try a different title or author.</p>
+</div>
 {% endif %}
+{% endblock %}

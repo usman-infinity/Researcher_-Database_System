@@ -1,23 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard</title>
-</head>
-<body>
+﻿{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="bg-white rounded shadow-sm p-4">
     <h1>Welcome, {{ user.name }}!</h1>
-    <h2>Quick Links:</h2>
-    <ul>
-        <li><a href="{{ url_for('dashboard.dashboard') }}">Dashboard Home</a></li>
-        <li><a href="{{ url_for('auth.login') }}">Login</a></li>
-        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+    <p class="lead">Role: <strong>{{ user.role }}</strong></p>
+    <div class="list-group">
+        <a class="list-group-item list-group-item-action" href="{{ url_for('papers.list_papers') }}">Browse Papers</a>
+        <a class="list-group-item list-group-item-action" href="{{ url_for('papers.search_papers') }}">Search Papers</a>
         {% if user.role == 'faculty' %}
-        <li><a href="{{ url_for('papers.upload_paper') }}">Upload Paper</a></li>
+        <a class="list-group-item list-group-item-action" href="{{ url_for('papers.upload_paper') }}">Upload New Paper</a>
         {% endif %}
-        <li><a href="{{ url_for('papers.list_papers') }}">Paper List</a></li>
-        <li><a href="{{ url_for('papers.search_papers') }}">Search Papers</a></li>
-        <a href="{{ url_for('papers.search_papers') }}"><button>Search Papers</button>
-</a>
-    </ul>
-</body>
-</html>
+        {% if user.role == 'admin' %}
+        <a class="list-group-item list-group-item-action" href="{{ url_for('admin.view_papers') }}">Admin Panel</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

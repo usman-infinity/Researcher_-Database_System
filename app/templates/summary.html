@@ -1,6 +1,19 @@
-<h2>{{ paper.title }}</h2>
-
-<h3>AI Generated Summary</h3>
-
-<p>{{ summary }}</p>
-<a href="{{ url_for('papers.summary', paper_id=paper.id) }}">Generate AI Summary</a>
+{% extends "base.html" %}
+{% block title %}Paper Summary{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="h3 mb-1">Paper Summary</h1>
+        <p class="text-muted mb-0">Read the AI-generated summary for the selected paper.</p>
+    </div>
+</div>
+<div class="card card-shadow">
+    <div class="card-body">
+        <h3 class="card-title mb-2">{{ paper.title }}</h3>
+        <p class="text-muted mb-4">Authors: {{ paper.authors }} • Year: {{ paper.year }}</p>
+        <h5>AI Generated Summary</h5>
+        <p class="fs-6">{{ summary }}</p>
+        <a class="btn btn-secondary mt-3" href="{{ url_for('papers.list_papers') }}">Back to Papers</a>
+    </div>
+</div>
+{% endblock %}

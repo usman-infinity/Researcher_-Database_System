@@ -1,20 +1,33 @@
-<h2>{{ paper.title }}</h2>
+{% extends "base.html" %}
+{% block title %}Paper Insights{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="h3 mb-1">Paper Insights</h1>
+        <p class="text-muted mb-0">Review abstract details and keyword insights extracted from the selected paper.</p>
+    </div>
+</div>
+<div class="card card-shadow">
+    <div class="card-body">
+        <h3 class="card-title mb-2">{{ paper.title }}</h3>
+        <p class="text-muted mb-4">Authors: {{ paper.authors }} • Year: {{ paper.year }}</p>
+        <h5 class="mb-2">Abstract</h5>
+        <p class="mb-4">{{ paper.abstract }}</p>
+        <h5 class="mb-3">Top Keywords</h5>
+        {% if keywords %}
+        <div>
+            {% for keyword in keywords %}
+            <span class="badge bg-secondary keyword-badge">{{ keyword }}</span>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-muted">No keywords extracted.</p>
+        {% endif %}
+        <div class="mt-4">
+            <a class="btn btn-outline-primary" href="{{ url_for('papers.summary', paper_id=paper.id) }}">View Summary</a>
+            <a class="btn btn-outline-secondary" href="{{ url_for('papers.recommend', paper_id=paper.id) }}">View Recommendations</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
 
-<h3>AI Paper Insights</h3>
-
-<p><strong>Abstract:</strong></p>
-<p>{{ paper.abstract }}</p>
-
-<h4>Top Keywords</h4>
-<ul>
-    {% for keyword in keywords %}
-        <li>{{ keyword }}</li>
-    {% else %}
-        <li>No keywords extracted.</li>
-    {% endfor %}
-</ul>
-
-<p>
-    <a href="{{ url_for('papers.summary', paper_id=paper.id) }}">View Summary</a> |
-    <a href="{{ url_for('papers.recommend', paper_id=paper.id) }}">View Recommendations</a>
-</p>

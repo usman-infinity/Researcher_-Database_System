@@ -1,9 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head><title>Dashboard</title></head>
-<body>
-<h2>Welcome, {{ user.name }}</h2>
-<p>Role: {{ user.role }}</p>
-<a href="{{ url_for('auth.logout') }}">Logout</a>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="h3 mb-1">Welcome back, {{ user.name }}!</h1>
+        <p class="text-muted mb-0">Manage your profile, browse papers, and upload new research from one place.</p>
+    </div>
+</div>
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card card-shadow h-100">
+            <div class="card-body">
+                <h5 class="card-title">Account</h5>
+                <p class="card-text">Role: <strong>{{ user.role|capitalize }}</strong></p>
+                <p class="card-text">Email: <strong>{{ user.email }}</strong></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card card-shadow h-100">
+            <div class="card-body">
+                <h5 class="card-title">Quick Actions</h5>
+                <div class="d-grid gap-2">
+                    <a class="btn btn-primary" href="{{ url_for('papers.list_papers') }}">Browse Papers</a>
+                    <a class="btn btn-outline-primary" href="{{ url_for('papers.upload_paper') }}">Upload Paper</a>
+                    <a class="btn btn-outline-secondary" href="{{ url_for('papers.search_papers') }}">Search Verified Papers</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
