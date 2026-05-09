@@ -48,4 +48,13 @@
         </div>
     </div>
 </div>
+
+<div class="mt-4 text-center">
+    <a class="btn btn-outline-primary me-2" href="{{ url_for('papers.summary', paper_id=paper.id) }}">View Summary</a>
+    <a class="btn btn-outline-secondary me-2" href="{{ url_for('papers.insights', paper_id=paper.id) }}">View Insights</a>
+    {% if paper.pdf_path %}
+    <a class="btn btn-outline-success me-2" href="{{ url_for('papers.download_paper', paper_id=paper.id) }}">Download PDF</a>
+    {% endif %}
+    <a class="btn btn-secondary" href="{{ url_for('papers.list_papers') }}">Back to Papers</a>
+</div>
 {% endblock %}

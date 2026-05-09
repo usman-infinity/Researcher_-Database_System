@@ -45,6 +45,9 @@
                         <a href="{{ url_for('papers.summary', paper_id=paper.id) }}" class="btn btn-sm btn-outline-primary">Summary</a>
                         <a href="{{ url_for('papers.insights', paper_id=paper.id) }}" class="btn btn-sm btn-outline-secondary">Insights</a>
                         <a href="{{ url_for('papers.recommend', paper_id=paper.id) }}" class="btn btn-sm btn-outline-info">Recommend</a>
+                        {% if paper.pdf_path %}
+                        <a href="{{ url_for('papers.download_paper', paper_id=paper.id) }}" class="btn btn-sm btn-outline-success">Download</a>
+                        {% endif %}
                         {% if not paper.verified and current_user.is_authenticated and current_user.role == 'admin' %}
                         <form method="POST" action="{{ url_for('papers.verify_paper', paper_id=paper.id) }}" class="d-inline">
                             <button type="submit" class="btn btn-sm btn-success">Verify</button>

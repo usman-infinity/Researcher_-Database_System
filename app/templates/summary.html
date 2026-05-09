@@ -13,7 +13,14 @@
         <p class="text-muted mb-4">Authors: {{ paper.authors }} • Year: {{ paper.year }}</p>
         <h5>AI Generated Summary</h5>
         <p class="fs-6">{{ summary }}</p>
-        <a class="btn btn-secondary mt-3" href="{{ url_for('papers.list_papers') }}">Back to Papers</a>
+        <div class="mt-4">
+            <a class="btn btn-outline-primary me-2" href="{{ url_for('papers.insights', paper_id=paper.id) }}">View Insights</a>
+            <a class="btn btn-outline-info me-2" href="{{ url_for('papers.recommend', paper_id=paper.id) }}">View Recommendations</a>
+            {% if paper.pdf_path %}
+            <a class="btn btn-outline-success me-2" href="{{ url_for('papers.download_paper', paper_id=paper.id) }}">Download PDF</a>
+            {% endif %}
+            <a class="btn btn-secondary" href="{{ url_for('papers.list_papers') }}">Back to Papers</a>
+        </div>
     </div>
 </div>
 {% endblock %}
