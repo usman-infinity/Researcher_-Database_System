@@ -2,9 +2,54 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
 from ..extensions import db, login_manager
-from ..models import User, Department, Paper
+from ..models import User, Department, Paper, LoginAttempt, AuditLog
+from datetime import datetime, timedelta
 
 auth_bp = Blueprint('auth', __name__, template_folder='../templates/auth')
+
+
+# ----------------------
+# Security Helper Functions
+# ----------------------
+def is_account_locked(email):
+    """Check if account is locked due to too many failed login attempts"""
+    # Check last 15 minutes for failed attempts
+    fifteen_minutes_ago = datetime.utcnow() - timedelta(minutes=15)
+    recent_attempts = LoginAttempt.query.filter_by(
+        email=email,
+        successful=False,
+        timestamp=fifteen_minutes_ago
+    ).count()
+
+    return recent_attempts >= 5  # Lock after 5 failed attempts
+
+
+def log_login_attempt(email, successful, ip_address=None, user_agent=None):
+    """Log a login attempt"""
+    attempt = LoginAttempt(
+        email=email,
+        successful=successful,
+        ip_address=ip_address or request.remote_addr,
+        user_agent=user_agent or request.headers.get('User-Agent')
+    )
+    db.session.add(attempt)
+    db.session.commit()
+
+
+def log_admin_action(user_id, action, target_type, target_id, details=None):
+    """Log admin actions for audit trail"""
+    if current_user.is_authenticated and current_user.role == 'admin':
+        audit_log = AuditLog(
+            user_id=user_id,
+            action=action,
+            target_type=target_type,
+            target_id=target_id,
+            details=details,
+            ip_address=request.remote_addr,
+            user_agent=request.headers.get('User-Agent')
+        )
+        db.session.add(audit_log)
+        db.session.commit()
 
 
 # ----------------------
@@ -16,16 +61,26 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
+        # Check if account is locked
+        if is_account_locked(email):
+            flash("Account temporarily locked due to too many failed login attempts. Try again in 15 minutes.", "danger")
+            log_login_attempt(email, False)
+            return redirect(url_for('auth.login'))
+
         user = User.query.filter_by(email=email).first()
         if not user or not check_password_hash(user.password, password):
             flash("Invalid credentials", "danger")
+            log_login_attempt(email, False)
             return redirect(url_for('auth.login'))
 
         if not user.approved and user.role != 'admin':
             flash("Your account is pending admin approval.", "warning")
+            log_login_attempt(email, False)
             return redirect(url_for('auth.login'))
 
+        # Successful login
         login_user(user)
+        log_login_attempt(email, True)
         flash(f"Welcome {user.name}", "success")
         return redirect(url_for('auth.dashboard'))
 

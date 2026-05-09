@@ -153,9 +153,9 @@ python run.py
 The application will be available at `http://127.0.0.1:5000/`
 
 ### 6. Access Admin Account
-- **Email**: admin@university.com
-- **Password**: admin123
-- **Role**: Administrator (can approve users and papers)
+**Super Admin**: Usman (contact for admin access)
+- Administrator privileges required for user/paper approvals
+- Contact the system administrator to request admin access
 
 ---
 

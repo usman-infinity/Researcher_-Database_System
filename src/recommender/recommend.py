@@ -2,6 +2,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 def recommend_papers(papers, current_title):
+    if len(papers) <= 1:
+        return []
 
     titles = [paper.title for paper in papers]
 

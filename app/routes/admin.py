@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
-from app.models import Paper, User, Department
+from app.models import Paper, User, Department, AuditLog
 from app.extensions import db
 from flask_login import login_required, current_user
 from sqlalchemy import func
+from .auth import log_admin_action  # Import the audit logging function
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -154,13 +155,23 @@ def approve_user(user_id):
         return redirect(url_for("auth.dashboard"))
 
     user = User.query.get_or_404(user_id)
-    
+
     # Prevent modification of primary admin account
     if user.email == "usmaniainfinity@gmail.com":
         return redirect(url_for("admin.view_users"))
-    
+
     user.approved = True
     db.session.commit()
+
+    # Log admin action
+    log_admin_action(
+        current_user.id,
+        "approve_user",
+        "user",
+        user_id,
+        f"Approved user: {user.name} ({user.email})"
+    )
+
     flash(f"User '{user.name}' approved successfully.", "success")
     return redirect(url_for("admin.view_users"))
 
@@ -172,15 +183,26 @@ def reject_user(user_id):
         return redirect(url_for("auth.dashboard"))
 
     user = User.query.get_or_404(user_id)
-    
+
     # Prevent modification of primary admin account
     if user.email == "usmaniainfinity@gmail.com":
         flash("Cannot reject the primary admin account.", "danger")
         return redirect(url_for("admin.view_users"))
-    
+
     user_name = user.name
+    user_email = user.email
     db.session.delete(user)
     db.session.commit()
+
+    # Log admin action
+    log_admin_action(
+        current_user.id,
+        "reject_user",
+        "user",
+        user_id,
+        f"Rejected and deleted user: {user_name} ({user_email})"
+    )
+
     flash(f"User '{user_name}' rejected and removed.", "success")
     return redirect(url_for("admin.view_users"))
 
@@ -237,6 +259,16 @@ def approve_paper(paper_id):
     paper = Paper.query.get_or_404(paper_id)
     paper.verified = True
     db.session.commit()
+
+    # Log admin action
+    log_admin_action(
+        current_user.id,
+        "verify_paper",
+        "paper",
+        paper_id,
+        f"Verified paper: {paper.title} by {paper.authors}"
+    )
+
     flash(f"Paper '{paper.title}' verified successfully.", "success")
     return redirect(url_for("admin.view_papers"))
 
@@ -252,8 +284,19 @@ def delete_paper(paper_id):
 
     paper = Paper.query.get_or_404(paper_id)
     paper_title = paper.title
+    paper_authors = paper.authors
     db.session.delete(paper)
     db.session.commit()
+
+    # Log admin action
+    log_admin_action(
+        current_user.id,
+        "delete_paper",
+        "paper",
+        paper_id,
+        f"Deleted paper: {paper_title} by {paper_authors}"
+    )
+
     flash(f"Paper '{paper_title}' deleted successfully.", "success")
     return redirect(url_for("admin.view_papers"))
 
@@ -281,3 +324,18 @@ dashboard_bp = Blueprint("dashboard", __name__)
 @login_required
 def dashboard():
     return render_template("dashboard.html", user=current_user)
+
+
+# -----------------------
+# View Audit Logs (Security)
+# -----------------------
+@admin_bp.route("/audit-logs")
+@login_required
+def view_audit_logs():
+    if current_user.role != "admin":
+        return redirect(url_for("auth.dashboard"))
+
+    # Get recent audit logs (last 100 entries)
+    audit_logs = AuditLog.query.order_by(AuditLog.timestamp.desc()).limit(100).all()
+
+    return render_template("admin_audit_logs.html", audit_logs=audit_logs)

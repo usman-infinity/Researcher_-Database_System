@@ -108,7 +108,7 @@
 
 <!-- Management Navigation -->
 <div class="row g-3 mb-4">
-    <div class="col-md-6 col-lg-4">
+    <div class="col-md-6 col-lg-3">
         <a href="{{ url_for('admin.view_users') }}" class="card card-shadow text-decoration-none h-100 hover" style="transition: transform 0.2s, box-shadow 0.2s;">
             <div class="card-body text-center">
                 <h5 class="card-title mb-2">👥 User Management</h5>
@@ -117,7 +117,7 @@
             </div>
         </a>
     </div>
-    <div class="col-md-6 col-lg-4">
+    <div class="col-md-6 col-lg-3">
         <a href="{{ url_for('admin.view_papers') }}" class="card card-shadow text-decoration-none h-100 hover" style="transition: transform 0.2s, box-shadow 0.2s;">
             <div class="card-body text-center">
                 <h5 class="card-title mb-2">📄 Paper Management</h5>
@@ -126,12 +126,21 @@
             </div>
         </a>
     </div>
-    <div class="col-md-6 col-lg-4">
+    <div class="col-md-6 col-lg-3">
         <a href="{{ url_for('admin.view_departments') }}" class="card card-shadow text-decoration-none h-100 hover" style="transition: transform 0.2s, box-shadow 0.2s;">
             <div class="card-body text-center">
                 <h5 class="card-title mb-2">🏢 Department Management</h5>
                 <p class="card-text small text-muted">Create, edit, and manage departments</p>
                 <span class="badge bg-info">{{ stats.total_departments }} Total</span>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <a href="{{ url_for('admin.view_audit_logs') }}" class="card card-shadow text-decoration-none h-100 hover" style="transition: transform 0.2s, box-shadow 0.2s;">
+            <div class="card-body text-center">
+                <h5 class="card-title mb-2">🔒 Security Audit</h5>
+                <p class="card-text small text-muted">Monitor admin actions and security logs</p>
+                <span class="badge bg-danger">🔍 View Logs</span>
             </div>
         </a>
     </div>

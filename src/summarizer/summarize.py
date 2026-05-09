@@ -1,4 +1,5 @@
 # Simple summarization without heavy dependencies
+from sklearn.feature_extraction.text import TfidfVectorizer
 def generate_summary(text):
     if not text:
         return "No text provided for summarization."
@@ -15,6 +16,18 @@ def generate_summary(text):
 def extract_keywords(text, top_n=8):
     if not text or not text.strip():
         return []
+
+    # For single document, use simple word frequency
+    if len([text]) == 1:
+        words = text.lower().split()
+        # Remove common stop words
+        stop_words = {'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'might', 'must', 'can', 'this', 'that', 'these', 'those'}
+        filtered_words = [word.strip('.,!?()[]{}') for word in words if word.lower() not in stop_words and len(word) > 2]
+        word_freq = {}
+        for word in filtered_words:
+            word_freq[word] = word_freq.get(word, 0) + 1
+        sorted_words = sorted(word_freq.items(), key=lambda x: x[1], reverse=True)
+        return [word for word, freq in sorted_words[:top_n]]
 
     vectorizer = TfidfVectorizer(stop_words='english', ngram_range=(1, 2), max_df=0.85)
     tfidf_matrix = vectorizer.fit_transform([text])
