@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}External Search{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <h2>Search Google Scholar (via SerpAPI)</h2>
+    <form method="POST" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="query" class="form-control" placeholder="Search query" value="{{ query or '' }}" required>
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </form>
+
+    {% if results %}
+    <div class="list-group">
+        {% for r in results %}
+        <div class="list-group-item">
+            <h5>{{ r.title }}</h5>
+            <p class="text-muted mb-1">{{ r.authors }} • {{ r.year }}</p>
+            <p>{{ r.snippet }}</p>
+            {% if r.link %}
+            <a href="{{ r.link }}" target="_blank" class="btn btn-sm btn-outline-secondary">Open</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% elif query %}
+    <p class="text-muted">No results found.</p>
+    {% endif %}
+</div>
+{% endblock %}

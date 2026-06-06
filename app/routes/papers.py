@@ -17,6 +17,7 @@ from app.extensions import db
 from src.recommender.recommend import recommend_papers
 from src.summarizer.summarize import generate_summary, extract_keywords
 from rapidfuzz import fuzz
+from src.external.serpapi_integration import search_serpapi
 
 # -------------------------------
 # Blueprint
@@ -142,3 +143,19 @@ def insights(paper_id):
     paper = Paper.query.get_or_404(paper_id)
     keywords = extract_keywords(paper.abstract)
     return render_template("insights.html", paper=paper, keywords=keywords)
+
+
+@papers_bp.route('/external_search', methods=['GET', 'POST'])
+def external_search():
+    """Search Google Scholar via SerpAPI and display results to import."""
+    results = []
+    query = None
+    if request.method == 'POST':
+        query = request.form.get('query')
+        api_key = current_app.config.get('SERPAPI_KEY')
+        try:
+            results = search_serpapi(query, api_key, num=10)
+        except Exception as e:
+            flash(f'External search failed: {e}', 'danger')
+
+    return render_template('external_search.html', results=results, query=query)
