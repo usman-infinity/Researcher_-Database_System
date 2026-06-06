@@ -96,3 +96,25 @@
 </div>
 {% endblock %}
 
+<form method="GET" action="{{ url_for('admin.manage_papers') }}" class="filter-form">
+    <div class="row">
+        <select name="year">
+            <option value="">All Years</option>
+            {% for y in years %}
+                <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="department">
+            <option value="">All Departments</option>
+            {% for dept in departments %}
+                <option value="{{ dept.id }}" {% if dept.id == selected_dept %}selected{% endif %}>
+                    {{ dept.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Filter</button>
+        <a href="{{ url_for('admin.manage_papers') }}">Reset</a>
+    </div>
+</form>

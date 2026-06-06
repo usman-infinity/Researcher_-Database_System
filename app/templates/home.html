@@ -13,6 +13,7 @@
                     <a href="{{ url_for('papers.upload_paper') }}" class="btn btn-outline-light btn-lg">Upload Paper</a>
                     {% else %}
                     <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg">Login to Upload</a>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Create Account</a>
                     {% endif %}
                 </div>
             </div>

@@ -339,3 +339,36 @@ def view_audit_logs():
     audit_logs = AuditLog.query.order_by(AuditLog.timestamp.desc()).limit(100).all()
 
     return render_template("admin_audit_logs.html", audit_logs=audit_logs)
+
+
+from flask import render_template, request
+from app.models import Paper, Department
+
+
+@admin_bp.route('/admin/papers')
+def manage_papers():
+    # Get filter values from the request
+    selected_year = request.args.get('year', type=int)
+    selected_dept = request.args.get('department', type=int)
+
+    # Start with a base query
+    query = Paper.query
+
+    # Apply filters if they exist
+    if selected_year:
+        query = query.filter(Paper.year == selected_year)
+    if selected_dept:
+        query = query.filter(Paper.department_id == selected_dept)
+
+    papers = query.all()
+    departments = Department.query.all()
+    
+    # Get unique years for the dropdown
+    years = [year[0] for year in Paper.query.with_entities(Paper.year).distinct().all()]
+
+    return render_template('admin/papers.html', 
+                           papers=papers, 
+                           departments=departments, 
+                           years=sorted(years, reverse=True),
+                           selected_year=selected_year,
+                           selected_dept=selected_dept)
