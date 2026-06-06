@@ -8,6 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../s
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, send_from_directory
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
+import re
 
 # Database models
 from app.models import Paper, Department
@@ -152,6 +153,15 @@ def external_search():
     query = None
     if request.method == 'POST':
         query = request.form.get('query')
+        if query:
+            url_pattern = re.compile(r'^(https?://)', re.IGNORECASE)
+            doi_pattern = re.compile(r'^(?:doi:\s*|https?://doi\.org/)?(10\.\d{4,9}/.+)$', re.IGNORECASE)
+            if url_pattern.match(query.strip()):
+                return redirect(query.strip())
+            doi_match = doi_pattern.match(query.strip())
+            if doi_match:
+                doi = doi_match.group(1)
+                return redirect(f'https://doi.org/{doi}')
         try:
             results = search_openalex(query, num=10)
         except Exception as e:

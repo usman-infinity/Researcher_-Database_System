@@ -2,11 +2,12 @@
 {% block title %}External Search{% endblock %}
 {% block content %}
 <div class="container py-4">
-    <h2>Search Google Scholar (via SerpAPI)</h2>
+    <h2>Search External Papers (via OpenAlex)</h2>
+    <p class="text-muted mb-3">Enter a paper title, DOI, or paste a direct URL to open the paper immediately.</p>
     <form method="POST" class="mb-3">
         <div class="input-group">
-            <input type="text" name="query" class="form-control" placeholder="Search query" value="{{ query or '' }}" required>
-            <button class="btn btn-primary" type="submit">Search</button>
+            <input type="text" name="query" class="form-control" placeholder="Title, DOI, or paper URL" value="{{ query or '' }}" required>
+            <button class="btn btn-primary" type="submit">Go</button>
         </div>
     </form>
 
