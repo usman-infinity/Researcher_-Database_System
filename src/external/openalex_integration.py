@@ -10,7 +10,6 @@ def search_openalex(query, num=10):
     params = {
         "search": query,
         "per_page": num,
-        "sort": "relevance",
     }
     response = requests.get(url, params=params, timeout=15)
     response.raise_for_status()
