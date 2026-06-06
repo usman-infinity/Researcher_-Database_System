@@ -1,7 +1,5 @@
 # 🧠 Research Database System
 
-![Project Banner](banner.png)
-
 [![Python](https://img.shields.io/badge/Python-3.10+-blue)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-3.1.3-orange)](https://flask.palletsprojects.com/)
 [![License](https://img.shields.io/badge/License-MIT-green)]()
@@ -11,233 +9,177 @@
 
 ## 🚀 Project Overview
 
-**Research Database System** is a comprehensive AI-powered platform for managing, uploading, searching, and analyzing research papers. Built with Flask and modern AI technologies, it provides researchers with intelligent tools to discover, analyze, and manage academic literature.
+**Research Database System** is a full-stack research management platform built with Flask. It enables users to register, upload papers, search internal and external research content, generate summaries, extract insights, and discover related papers.
 
-The system features a secure admin approval workflow, AI-powered paper analysis, intelligent recommendations, and a user-friendly interface for seamless research management.
-
----
-
-## 📂 Project Status
-
-| Phase | Feature | Status |
-|------|--------|--------|
-| Phase 1 | Project Setup & Environment | ✅ **Completed** |
-| Phase 2 | Database Models & Migrations | ✅ **Completed** |
-| Phase 3 | Authentication & User Management | ✅ **Completed** |
-| Phase 4 | Paper Upload & File Management | ✅ **Completed** |
-| Phase 5 | Admin Approval Dashboard | ✅ **Completed** |
-| Phase 6 | Intelligent Paper Search | ✅ **Completed** |
-| Phase 7 | AI Recommendation System | ✅ **Completed** |
-| Phase 8 | AI Paper Summarization | ✅ **Completed** |
-| Phase 9 | AI Paper Insights & Keywords | ✅ **Completed** |
-| Phase 10 | Security & Role Management | ✅ **Completed** |
-| Phase 11 | UI/UX Polish & Testing | ✅ **Completed** |
-
-**🎉 All Features Fully Implemented and Tested!**
+The platform supports:
+- secure authentication with admin approval,
+- research paper upload and verification,
+- AI-driven summarization and keyword extraction,
+- intelligent recommendations,
+- OpenAlex external paper discovery,
+- and role-based access control.
 
 ---
 
-## 🔍 Key Features
+## ✅ Key Features
 
-### 👤 User Management
-- **Secure Authentication**: Flask-Login based user system
-- **Admin Approval**: New accounts require administrator approval
-- **Role-Based Access**: Admin and regular user roles
-- **Profile Dashboard**: User statistics and quick actions
+### User Authentication & Roles
+- Flask-Login based authentication
+- Registration with admin approval
+- Admin and faculty/user roles
+- Secure login and logout flow
 
-### 📄 Paper Management
-- **Smart Upload**: Upload research papers with abstracts and PDF files
-- **Admin Verification**: Comprehensive approval workflow
-- **File Management**: Secure PDF storage and download
-- **Department Organization**: Papers organized by academic departments
+### Paper Management
+- Upload papers with title, authors, year, abstract, and optional PDF
+- Associate papers with user accounts and departments
+- Paper verification workflow for admin approval
+- Secure file upload and download support
 
-### 🔎 Intelligent Search
-- **Fuzzy Search**: RapidFuzz-powered search by title and author
-- **Real-time Results**: Fast research paper discovery
-- **Verified Papers Only**: Search through approved publications
+### Search & Discovery
+- Internal search across verified papers by title and author
+- Fuzzy search using RapidFuzz
+- External OpenAlex search integration
+- Direct DOI or paper URL open handling
+- Automatic author-based external search for signed-in users
 
-### 🤖 AI-Powered Analysis
+### AI-powered Research Tools
+- Abstract summarization
+- Keyword extraction and insights
+- Related paper recommendations
+- Summary and recommendations accessible from paper details
 
-#### AI Paper Summarization
-- **Automatic Summaries**: Generate concise paper summaries using advanced NLP
-- **Transformer Models**: Powered by Hugging Face Transformers
-- **Abstract Analysis**: Intelligent summarization of research abstracts
-
-#### AI Paper Insights
-- **Keyword Extraction**: TF-IDF based keyword extraction from abstracts
-- **Content Analysis**: Identify main topics and themes
-- **Smart Metadata**: Extract key information for better paper understanding
-
-#### AI Recommendations
-- **Content-Based Similarity**: TF-IDF + Cosine Similarity algorithm
-- **Related Research**: Discover papers with similar topics and themes
-- **Intelligent Suggestions**: Personalized paper recommendations
-
-### 🛡️ Security Features
-- **Admin-Only Promotions**: Only administrators can create new admins
-- **Approval Workflow**: All new accounts and papers require verification
-- **Secure File Upload**: Safe PDF handling and storage
-- **Role-Based Permissions**: Granular access control throughout the system
+### Admin Controls
+- View and manage users
+- Approve or reject user registrations
+- Review and verify uploaded papers
+- Promote or demote user roles
+- Audit logging for admin actions
 
 ---
 
 ## 🛠 Technology Stack
 
-### Backend Framework
-- **Python 3.10+**: Core programming language
-- **Flask 3.1.3**: Web framework with modern features
-- **Flask-SQLAlchemy 3.1.1**: Database ORM and management
-- **Flask-Login 0.6.3**: User authentication and session management
-- **Flask-Migrate 4.0.7**: Database migrations and schema management
-
-### AI & Machine Learning
-- **Transformers 4.48.0**: Hugging Face NLP models for summarization
-- **Scikit-learn 1.6.1**: Machine learning algorithms for recommendations
-- **RapidFuzz 3.12.1**: Fuzzy string matching for search
-- **Torch 2.6.0**: PyTorch for deep learning models
-- **NumPy 2.2.6 & SciPy 1.15.3**: Scientific computing libraries
-
-### Database & Storage
-- **SQLite**: Local database for development and production
-- **Alembic 1.13.4**: Database migration tool
-- **File System**: Secure PDF storage in uploads directory
-
-### Frontend & UI
-- **HTML5 & CSS3**: Semantic markup and styling
-- **Bootstrap 5**: Responsive design framework
-- **Jinja2 3.1.6**: Template engine for dynamic content
-- **Font Awesome**: Icons and visual elements
+- Python 3.10+
+- Flask 3.1.3
+- Flask-SQLAlchemy
+- Flask-Login
+- Flask-Migrate
+- SQLite
+- Requests
+- RapidFuzz
+- Transformers (Hugging Face)
+- scikit-learn
+- NumPy and SciPy
 
 ---
 
-## ⚙️ Installation & Setup
+## 📦 Installation
 
-### Prerequisites
-- Python 3.10 or higher
-- pip package manager
-- Git
-
-### 1. Clone the Repository
+### 1. Clone repository
 ```bash
 git clone https://github.com/usman-infinity/Researcher_-Database_System.git
 cd Researcher_-Database_System/research_system
 ```
 
-### 2. Create Virtual Environment
+### 2. Create and activate virtual environment
 ```bash
-# Windows
 python -m venv research_env
 research_env\Scripts\activate
-
-# Linux/Mac
-python -m venv research_env
-source research_env/bin/activate
 ```
 
-### 3. Install Dependencies
+### 3. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Initialize Database
+### 4. Create admin user and initialize database
 ```bash
-# Create database tables
 python create_admin.py
 ```
 
-### 5. Run the Application
+### 5. Run the app
 ```bash
 python run.py
 ```
 
-The application will be available at `http://127.0.0.1:5000/`
-
-### 6. Access Admin Account
-**Super Admin**: Usman (contact for admin access)
-- Administrator privileges required for user/paper approvals
-- Contact the system administrator to request admin access
+Open the app at `http://127.0.0.1:5000/`
 
 ---
 
-## 📖 Usage Guide
+## 🚀 Usage
 
-### For Regular Users
-1. **Register**: Create an account (requires admin approval)
-2. **Login**: Access your dashboard after approval
-3. **Upload Papers**: Submit research papers for admin review
-4. **Explore**: Search, view summaries, insights, and recommendations
-5. **Download**: Access approved PDF files
+### Regular users
+- Register for an account
+- Wait for admin approval
+- Login and access your dashboard
+- Upload papers and submit them for verification
+- Search verified papers
+- View summaries, insights, and recommendations
 
-### For Administrators
-1. **User Management**: Approve/reject user registrations
-2. **Paper Management**: Review and verify submitted papers
-3. **Department Management**: Create and manage academic departments
-4. **System Monitoring**: View statistics and manage the platform
+### Admin users
+- Approve or reject registrations
+- Verify uploaded papers
+- Manage departments, users, and papers
+- Monitor system activity from the admin dashboard
 
-### AI Features Usage
-- **Search**: Use the search page to find papers by title or author
-- **Summary**: Click "View Summary" to generate AI-powered paper summaries
-- **Insights**: Click "View Insights" to extract keywords and analyze content
-- **Recommendations**: Click "View Recommendations" to find similar papers
+### External search
+- Go to the External Search page
+- Paste a paper title, DOI, or direct paper URL
+- Signed-in users automatically see external papers matching their author name
 
 ---
 
-## 🏗 Project Structure
+## 🗂 Project Structure
 
 ```
 research_system/
 ├── app/
-│   ├── __init__.py          # Flask application factory
-│   ├── extensions.py        # Flask extensions initialization
-│   ├── models.py           # Database models (User, Paper, Department)
-│   └── routes/
-│       ├── __init__.py
-│       ├── auth.py         # Authentication routes
-│       ├── admin.py        # Admin management routes
-│       └── papers.py       # Paper management routes
-├── src/
 │   ├── __init__.py
+│   ├── extensions.py
+│   ├── models.py
+│   └── routes/
+│       ├── auth.py
+│       ├── admin.py
+│       └── papers.py
+├── src/
 │   ├── recommender/
-│   │   ├── __init__.py
-│   │   └── recommend.py    # AI recommendation engine
+│   │   └── recommend.py
 │   └── summarizer/
-│       ├── __init__.py
-│       └── summarize.py    # AI summarization and insights
-├── templates/              # Jinja2 HTML templates
-├── static/                 # CSS, JS, images
-├── migrations/             # Database migrations
-├── uploads/                # PDF file storage
-├── config.py              # Application configuration
-├── run.py                 # Application entry point
-├── create_admin.py        # Admin account creation script
-├── requirements.txt       # Python dependencies
-└── README.md             # This file
+│       └── summarize.py
+├── templates/
+├── uploads/
+├── migrations/
+├── config.py
+├── create_admin.py
+├── run.py
+├── requirements.txt
+└── README.md
 ```
 
 ---
 
 ## 🔧 Configuration
 
-The application uses environment-based configuration:
-
-- **Development**: SQLite database, debug mode enabled
-- **Production**: Configurable database URL, debug disabled
-- **Security**: Secure session keys and file upload restrictions
-
-Key configuration options in `config.py`:
-- Database URI
-- Secret keys
-- Upload folder paths
-- AI model settings
+Configuration is defined in `config.py` and includes:
+- database connection settings
+- secret key and security options
+- upload folder settings
+- model and external API settings
 
 ---
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create a new branch
+3. Commit your improvements
+4. Open a pull request
+
+---
+
+## 📄 License
+
+This project uses the MIT License.
 5. Open a Pull Request
 
 ---

@@ -151,6 +151,7 @@ def external_search():
     """Search OpenAlex and display results to import."""
     results = []
     query = None
+    auto_search = False
     if request.method == 'POST':
         query = request.form.get('query')
         if query:
@@ -167,4 +168,12 @@ def external_search():
         except Exception as e:
             flash(f'External search failed: {e}', 'danger')
 
-    return render_template('external_search.html', results=results, query=query)
+    elif current_user.is_authenticated:
+        query = current_user.name
+        auto_search = True
+        try:
+            results = search_openalex(query, num=10)
+        except Exception as e:
+            flash(f'External search failed: {e}', 'danger')
+
+    return render_template('external_search.html', results=results, query=query, auto_search=auto_search)

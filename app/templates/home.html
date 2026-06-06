@@ -9,11 +9,12 @@
                 <p class="lead mb-4">Browse verified papers, upload new research, and explore AI-powered summaries and recommendations from one polished dashboard.</p>
                 <div class="d-flex flex-wrap gap-2">
                     <a href="{{ url_for('papers.list_papers') }}" class="btn btn-light btn-lg">View Papers</a>
+                    <a href="{{ url_for('papers.external_search') }}" class="btn btn-primary btn-lg">Search External Papers</a>
                     {% if current_user.is_authenticated %}
                     <a href="{{ url_for('papers.upload_paper') }}" class="btn btn-outline-light btn-lg">Upload Paper</a>
                     {% else %}
                     <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg">Login to Upload</a>
-                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Create Account</a>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-secondary btn-lg">Create Account</a>
                     {% endif %}
                 </div>
             </div>
